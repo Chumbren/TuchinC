@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TuchinC": {
+      "commandName": "Project",
+      "commandLineArgs": "F:\\scripts\\index.tch"
+    }
+  }
+}

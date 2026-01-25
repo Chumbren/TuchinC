@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="PackageManager/PackageManager.csproj" Id="699086e6-6281-4455-996f-4eff7c7b38aa" />
   <Project Path="TuchinC/TuchinC.csproj" />
 </Solution>

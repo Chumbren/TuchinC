@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PackageManager": {
+      "commandName": "Project",
+      "commandLineArgs": "F:\\scripts\\index.tch"
+    }
+  }
+}
