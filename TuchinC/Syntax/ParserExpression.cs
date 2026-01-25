@@ -249,7 +249,7 @@ namespace TuchinC.Syntax
                     expr = IteratorCall(expr);
                 else if (Match(TokenType.DOT))
                 {
-                    Token name = Consume(TokenType.IDENTIFIER, "Отсутствует имя свойства после '.'.");
+                    Token name = Consume(TokenType.IDENTIFIER, "Требуется имя свойства после '.'.");
                     expr = new Get(expr,name);
                 }
                 else break;
@@ -276,7 +276,7 @@ namespace TuchinC.Syntax
             }
 
             Token paren = Consume(TokenType.RIGHT_PAREN,
-                                   "Отсутсвует ')' после передачи аргументов в функцию");
+                                   "Требуется ')' после передачи аргументов в функцию");
 
             return new FunctionCall(calle,paren,args); 
         }
@@ -291,7 +291,7 @@ namespace TuchinC.Syntax
             {
 
                 Token paren = Consume(TokenType.RIGHT_BRACKET,
-                                       "Отсутсвует ']' после передачи индекса в итератор");
+                                       "Требуется ']' после передачи индекса в итератор");
 
                 return new IteratorCall(calle, paren, index);
             }
@@ -325,10 +325,14 @@ namespace TuchinC.Syntax
                 return Arrow(Previous().Type);
 
             if (Match(TokenType.LEFT_PAREN))
-                    return new Grouping(Expression());
+            {
+                var group = new Grouping(Expression());
+                Consume(TokenType.RIGHT_PAREN, "Требуется ')'");
+                return group;
+            }
 
 
-            throw Error(Peek(), "Выражение отсутсвует");
+            throw Error(Peek(), "Выражение отсутствует");
         }
 
         private ArrowFunction Arrow(TokenType type)
@@ -358,7 +362,7 @@ namespace TuchinC.Syntax
                 return new ArrowFunction(_params, input);
             }
 
-            throw Error(Peek(),"Отсутствует '=>' при определении стрелочной функции");
+            throw Error(Peek(),"Требуется '=>' при определении стрелочной функции");
         }
 
         private List<Token> GetParamsArrowFunction() 
@@ -372,14 +376,14 @@ namespace TuchinC.Syntax
                         Error(Peek(), "Число аргументов функции превышает 255");
 
                     parameters.Add(
-                        Consume(TokenType.IDENTIFIER, "Отсутствует идентификатор"));
+                        Consume(TokenType.IDENTIFIER, "Требуется идентификатор"));
                 }
                 while (Match(TokenType.COMMA));
            
             }
             
 
-            Consume(TokenType.VLINE, $"Отсутствует '|' после обьявления параметров стрелочной функции");
+            Consume(TokenType.VLINE, $"Требуется '|' после обьявления параметров стрелочной функции");
             return parameters;
         }
 
@@ -397,7 +401,7 @@ namespace TuchinC.Syntax
             }
 
             Consume(TokenType.RIGHT_BRACKET, 
-                "Отсутсвует ']' после передачи элементов в коллекцию");
+                "Требуется ']' после передачи элементов в коллекцию");
 
             return elements;
         } 

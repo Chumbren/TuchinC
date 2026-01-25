@@ -42,7 +42,7 @@ namespace TuchinC.Syntax
             if (!Check(TokenType.SEMICOLON))
                 value = Expression();
 
-            Consume(TokenType.SEMICOLON, "Отсутствует ';' после возращаемого значения");
+            Consume(TokenType.SEMICOLON, "Требуется ';' после возращаемого значения");
             return new Return(keyword, value);
         }
 
@@ -74,7 +74,7 @@ namespace TuchinC.Syntax
         {
 
             Expr? condition = !Check(TokenType.SEMICOLON) ? Expression() : null;
-            Consume(TokenType.SEMICOLON, "Отсутствует ';' после условия цикла");
+            Consume(TokenType.SEMICOLON, "Требуется ';' после условия цикла");
 
             return condition;
         }
@@ -82,7 +82,7 @@ namespace TuchinC.Syntax
         private Expr? GetIncreamentLoopFor()
         {
             Expr? increament = !Check(TokenType.RIGHT_PAREN) ? Expression() : null;
-            Consume(TokenType.RIGHT_PAREN, "Отсутствует ')' после фазы предложений цикла for ");
+            Consume(TokenType.RIGHT_PAREN, "Требуется ')' после фазы предложений цикла for ");
 
             return increament;
         }
@@ -108,12 +108,12 @@ namespace TuchinC.Syntax
         private Switch SwitchStatement()
         {
             Expr condition = Expression();
-            Consume(TokenType.LEFT_PAREN, "Отсутствует '{' после 'switch'");
+            Consume(TokenType.LEFT_PAREN, "Требуется '{' после 'switch'");
 
             List<Case> cases = GetSwitchCases(); 
             Block? @default = GetDefaultCase();
      
-            Consume(TokenType.RIGHT_PAREN, "Отсутствует '}' для завешения блока 'switch'");
+            Consume(TokenType.RIGHT_PAREN, "Требуется '}' для завешения блока 'switch'");
 
 
             return new Switch(condition,cases,@default);
@@ -141,7 +141,7 @@ namespace TuchinC.Syntax
 
             Literal value = (Literal)expr;
 
-            Consume(TokenType.LEFT_PAREN, "Отсутствует ':' после 'case'");
+            Consume(TokenType.LEFT_PAREN, "Требуется ':' после 'case'");
             List<Stmt?> body = GetCaseBody();
             Block block = new(body);
             Case @case = new(value, block);
@@ -219,7 +219,8 @@ namespace TuchinC.Syntax
         private Expression ExpressionStatement()
         {
             Expr expr = Expression();
-            Consume(TokenType.SEMICOLON, "Отсутствует ';' после выражения.");
+            Console.WriteLine(Peek());
+            Consume(TokenType.SEMICOLON, "Требуется ';' после выражения.");
             return new Expression(expr);
         }
 
@@ -227,7 +228,7 @@ namespace TuchinC.Syntax
         {
             List<Stmt?> statements = GetBlockBody(TokenType.RIGHT_BRACE);
 
-            Consume(TokenType.RIGHT_BRACE, "Отсутствует '}' после блока");
+            Consume(TokenType.RIGHT_BRACE, "Требуется '}' после блока");
             return statements;
         }
 

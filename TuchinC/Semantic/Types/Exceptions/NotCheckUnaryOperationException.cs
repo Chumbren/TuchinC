@@ -6,6 +6,7 @@ using TuchinC.Lexical;
 namespace TuchinC.Semantic.Types.Exceptions
 {
     internal class NotCheckUnaryOperationException(string @operator, ValueType type )
-        :TypeException($"Не удалось применить оператор '{@operator}' к типу '{type}'")
+        :TypeException($"Не удалось применить оператор '{@operator}' к типу " +
+            $"'{(type.Type == TypeValue.Identifier?type.Name: type)}'")
     {}
 }

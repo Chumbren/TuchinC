@@ -10,8 +10,8 @@ namespace TuchinC.Lexical
     internal class Scanner
     {
         private static readonly List<string> _types = [
-                "bl",
-                "ch",
+                "bool",
+                "char",
                 "i8",
                 "i16",
                 "i32",

@@ -9,7 +9,7 @@ namespace TuchinC.AST.Expressions.Visitors {
         T VisitVariableExpr(Variable expr);
         T VisitAssignExpr(Assign expr);
         T VisitTernaryExpr(Ternary expr);
-        T VisitLogicalExpr(Logical logical);
+        T VisitLogicalExpr(Logical expr);
         T VisitBinaryExpr(Binary expr);
         T VisitUnaryExpr(Unary expr);
         T VisitCallExpr(Call expr);

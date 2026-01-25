@@ -34,11 +34,11 @@ namespace TuchinC.Syntax
 
         public Struct StructDeclaration()
         {
-            Token name = Consume(TokenType.IDENTIFIER, "Отсутствует имя у структуры");
+            Token name = Consume(TokenType.IDENTIFIER, "Требуется имя у структуры");
 
-            Consume(TokenType.LEFT_BRACE, "Отсутствует '{' поле определения имени структуры");
+            Consume(TokenType.LEFT_BRACE, "Требуется '{' поле определения имени структуры");
             List <Function> body = GetStructBody();
-            Consume(TokenType.RIGHT_BRACE, "Отсутствует '}' поле объявления тела структуры");
+            Consume(TokenType.RIGHT_BRACE, "Требуется '}' поле объявления тела структуры");
 
 
             return new Struct(name,body);
@@ -65,9 +65,9 @@ namespace TuchinC.Syntax
                 Advance();
             }
             if (path.Count == 0)
-                Error(Peek(),"Отсутствует путь к импорта");
+                Error(Peek(),"Требуется путь к импорта");
 
-            Consume(TokenType.SEMICOLON,"Отсутствует ';' после определения импорта");
+            Consume(TokenType.SEMICOLON,"Требуется ';' после определения импорта");
             
 
             return new Use(path);
@@ -75,7 +75,7 @@ namespace TuchinC.Syntax
 
         private Function FunctionDeclaration(FunctionType kind) 
         {
-            Token name = Consume(TokenType.IDENTIFIER,$"Отсутствует название {kind}.");
+            Token name = Consume(TokenType.IDENTIFIER,$"Требуется название {kind}.");
             List<Token> parameters = GetFunctionParameters(kind);
 
             Stmt body = GetFunctionBody(kind);
@@ -85,7 +85,7 @@ namespace TuchinC.Syntax
 
         private List<Token> GetFunctionParameters(FunctionType kind)
         {
-            Consume(TokenType.LEFT_PAREN, $"Отсутствует '(' после имени {kind}");
+            Consume(TokenType.LEFT_PAREN, $"Требуется '(' после имени {kind}");
             List<Token> parameters = [];
             if (!Check(TokenType.RIGHT_PAREN))
             {
@@ -96,10 +96,10 @@ namespace TuchinC.Syntax
 
 
                     parameters.Add(
-                        Consume(TokenType.IDENTIFIER,"Отсутствует идентификатор"));
+                        Consume(TokenType.IDENTIFIER,"Требуется идентификатор"));
                 } while (Match(TokenType.COMMA));
             }
-            Consume(TokenType.RIGHT_PAREN, $"Отсутствует ')' после обьявления параметров");
+            Consume(TokenType.RIGHT_PAREN, $"Требуется ')' после обьявления параметров");
 
             return parameters;
         }
@@ -109,7 +109,7 @@ namespace TuchinC.Syntax
             Stmt body;
             if (!Match(TokenType.ARROW))
             {
-                Consume(TokenType.LEFT_BRACE, "Отсутствует '{' после обьявления параметров " + kind);
+                Consume(TokenType.LEFT_BRACE, "Требуется '{' после обьявления параметров " + kind);
                 List<Stmt?> block = Block();
                 body = new Block(block);
             }
@@ -124,12 +124,12 @@ namespace TuchinC.Syntax
 
         private Let LetDeclaration()
         {
-            Token name = Consume(TokenType.IDENTIFIER, "Отсутствует имя переменной");
+            Token name = Consume(TokenType.IDENTIFIER, "Требуется имя переменной");
             ValueType type = GetTypeLet(); 
             Expr? init = Match(TokenType.EQUAL) ? Expression() : null;
             
 
-            Consume(TokenType.SEMICOLON, "Отсутствует ';' после объявления переменной");
+            Consume(TokenType.SEMICOLON, "Требуется ';' после объявления переменной");
             return new Let(name, type, init);
         }
 
@@ -140,11 +140,11 @@ namespace TuchinC.Syntax
                 if (Match(TokenType.IDENTIFIER) || Match(TokenType.PRIMITIVE_TYPE))
                     return new ValueType(Peek().Lexeme,  TypeValue.None);
 
-                Error(Previous(), "Отсутствует тип после ':'");
+                Error(Previous(), "Требуется тип после ':'");
 
             }
 
-            return ValueType.Empty;
+            return ValueType.ToEmpty();
         }
     }
 }
