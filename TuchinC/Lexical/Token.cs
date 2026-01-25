@@ -26,7 +26,7 @@ namespace TuchinC.Lexical
         LESS, LESS_EQUAL,
 
         //Литералы
-        IDENTIFIER, STRING, NUMBER, PRIMITIVE_TYPE,
+        IDENTIFIER, LITERAL,
 
         //Ключевые слова
         STRUCT, IF, ELIF, ELSE, SWITCH, CASE, DEFAULT,

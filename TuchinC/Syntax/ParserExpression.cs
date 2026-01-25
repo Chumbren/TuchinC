@@ -312,7 +312,7 @@ namespace TuchinC.Syntax
             if (Match(TokenType.LEFT_BRACKET))
                 return new Collection(Elements());
 
-            if (Match(TokenType.NUMBER, TokenType.STRING))
+            if (Match(TokenType.LITERAL))
                 return new Literal(Previous().Literal);
 
             if (Match(TokenType.IDENTIFIER))

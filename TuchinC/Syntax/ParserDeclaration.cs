@@ -137,7 +137,7 @@ namespace TuchinC.Syntax
         {
             if (Match(TokenType.COLON))
             {
-                if (Match(TokenType.IDENTIFIER) || Match(TokenType.PRIMITIVE_TYPE))
+                if (Match(TokenType.IDENTIFIER) || Match(TokenType.LITERAL))
                     return new ValueType(Peek().Lexeme,  TypeValue.None);
 
                 Error(Previous(), "Требуется тип после ':'");

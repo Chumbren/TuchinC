@@ -199,7 +199,7 @@ namespace TuchinC.Lexical
             //Если текущий текст не является зарезервированным словом
             //или примитивным типом то он является идентификатором
             if (!_keywords.TryGetValue(text, out TokenType type))
-                type = _types.Contains(text) ? TokenType.PRIMITIVE_TYPE : TokenType.IDENTIFIER;
+                type = _types.Contains(text) ? TokenType.LITERAL : TokenType.IDENTIFIER;
 
             AddToken(type);
         }
@@ -238,10 +238,55 @@ namespace TuchinC.Lexical
 
             string literal = source[start..current];
             literal = literal.IndexOf('.') >0 ?literal.Replace('.',','):literal;
-            AddToken(TokenType.NUMBER,double.Parse(literal));
+            AddToken(TokenType.LITERAL,CastNumber(literal));
 
         }
 
+        private static object CastNumber(string source)
+        {
+            object? result = CastInteger(ref source);
+            if (result != null)
+                return result;
+
+            result = CastReal(ref source);
+
+            if (result != null) 
+                return result;
+
+            throw new ArgumentOutOfRangeException(source, 
+                            "Неизвестный тип числа");
+        }
+
+        private static object? CastInteger(ref string source)
+        {
+            if (byte.TryParse(source, out var int8))
+                return int8;
+
+            if (short.TryParse(source, out var int16))
+                return int16;
+
+            if (int.TryParse(source, out var int32))
+                return int32;
+
+            if (long.TryParse(source, out var int64))
+                return int64;
+
+            return null;
+        }
+        private static object? CastReal(ref string source)
+        {
+            if (float.TryParse(source, out var d16))
+                return d16;
+
+            if (double.TryParse(source, out var d32))
+                return d32;
+
+            if (decimal.TryParse(source, out var d64))
+                return d64;
+
+
+            return null;
+        }
 
         //Обработка строкового литерала
         private void String()
@@ -263,7 +308,7 @@ namespace TuchinC.Lexical
             Advance();
 
             string value = source[(start+1)..(current-1)];
-            AddToken(TokenType.STRING,value);
+            AddToken(TokenType.LITERAL,value);
 
         }
 

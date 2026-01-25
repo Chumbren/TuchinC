@@ -219,7 +219,6 @@ namespace TuchinC.Syntax
         private Expression ExpressionStatement()
         {
             Expr expr = Expression();
-            Console.WriteLine(Peek());
             Consume(TokenType.SEMICOLON, "Требуется ';' после выражения.");
             return new Expression(expr);
         }
