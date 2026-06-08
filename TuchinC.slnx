@@ -1,4 +1,5 @@
 <Solution>
-  <Project Path="PackageManager/PackageManager.csproj" Id="699086e6-6281-4455-996f-4eff7c7b38aa" />
+  <Project Path="PackageManager/Heart.csproj" Id="699086e6-6281-4455-996f-4eff7c7b38aa" />
+  <Project Path="TuchinC.Test/TuchinC.Test.csproj" Id="9fd57ead-b457-498d-a8c2-c3e4af1a7657" />
   <Project Path="TuchinC/TuchinC.csproj" />
 </Solution>

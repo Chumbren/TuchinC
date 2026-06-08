@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TuchinC.AST.Lexical;
 
-namespace TuchinC.Exceptions
+namespace TuchinC.AST.Nodes
 {
-    public class RuntimeError(Token token,string message):Exception(message)
+    public abstract class SyntaxTree(Token keyword) 
     {
-        public readonly Token Token = token;
+        public readonly Token Keyword = keyword;
     }
 }

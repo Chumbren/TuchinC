@@ -1,50 +1,32 @@
 ﻿
 using System.Text;
-using TuchinC.Lexical;
-using TuchinC.Interpreters;
 using TuchinC.Exceptions;
-using TuchinC.AST.Statements;
 using TuchinC.Semantic;
 using TuchinC.Syntax;
-using TuchinC.Semantic.Types.Exceptions;
+using TuchinC.GenerateByte;
+using TuchinC.AST.Lexical;
+using TuchinC.AST.Semantic.Types.Exceptions;
+using TuchinC.AST.Nodes.Statements;
+using TuchinC.GenerateByte.Disassemble;
 
 namespace TuchinC
 {
     public static class Tuchin
     {
-
-        public static readonly string Path = String.Empty;
-
-        private static readonly Interpreter _interpreter = new();
         private static bool _hadError = false;
         private static bool _hadRuntimeError = false;
 
-
-        public static void RunPromt()
-        {
-            while (true)
-            {
-                Console.Write("> ");
-                var line = Console.ReadLine();
-                if (line == null) break;
-                Run(line);
-
-                _hadError = false;
-            }
-        }
-
         public static void RunFile(string path)
         {
-            byte[] file = File.ReadAllBytes(path);
-            string source = Encoding.UTF8.GetString(file);
+            string source = File.ReadAllText(path);
 
-            Run(source);
+            Run(path, source);
             if (_hadError) System.Environment.Exit(65);
             if (_hadRuntimeError) System.Environment.Exit(70);
         }
 
 
-        private static void Run(string source)
+        public static void Run(string project, string source)
         {
             List<Token> tokens = Scan(source);
             List<Stmt?> statements = Parse(tokens);
@@ -55,10 +37,35 @@ namespace TuchinC
 
             if (_hadError) return;
 
-            _interpreter.Interpret(statements);
+            var bytecode = Generate(project, statements);
+        }
+        public static string? RunWithDisassembler(string project, string source)
+        {
+            List<Token> tokens = Scan(source);
+            List<Stmt?> statements = Parse(tokens);
+
+            if (_hadError) return null;
+
+            Resolve(statements);
+
+            if (_hadError) return null;
+
+            var bytecode = Generate(project, statements);
+            Console.WriteLine("BYTECODE");
+            Console.WriteLine(new String('=', 100));
+            foreach (var item in bytecode)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine(new String('=', 100));
+
+            Disassembler disassembler = new([.. bytecode]);
+            var result = disassembler.Disassemble();
+
+            return result;
         }
 
-        private static List<Token> Scan(string source)
+        public static List<Token> Scan(string source)
         {
             Scanner scanner = new(source);
             List<Token> tokens = scanner.ScanTokens();
@@ -66,7 +73,7 @@ namespace TuchinC
             return tokens;
         }
 
-        private static List<Stmt?> Parse(List<Token> tokens)
+        public static List<Stmt?> Parse(List<Token> tokens)
         {
             Parser parser = new(tokens);
             List<Stmt?> statements = parser.Parse();
@@ -74,10 +81,16 @@ namespace TuchinC
             return statements;
         }
 
-        private static void Resolve(List<Stmt?> stmts)
+        public static void Resolve(List<Stmt?> stmts)
         {
-            Resolver resolver = new(_interpreter);
+            Resolver resolver = new();
             resolver.Analize(stmts);
+        }
+
+        public static IReadOnlyList<byte> Generate(string project, List<Stmt?> stmts)
+        {
+            Generator generator = new(project, stmts);
+            return generator.Generate();
         }
 
         public static void RuntimeError(RuntimeError error)

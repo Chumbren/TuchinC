@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "PackageManager": {
+    "Heart": {
       "commandName": "Project",
-      "commandLineArgs": "F:\\scripts\\index.tch"
+      "commandLineArgs": "D:/scripts\r\nrun\r\n-dis"
     }
   }
 }

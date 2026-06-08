@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\Typed\" />
-    <Folder Include="Objects\Globals\Structs\" />
+    <Compile Remove="Exceptions\Typed\**" />
+    <EmbeddedResource Remove="Exceptions\Typed\**" />
+    <EmbeddedResource Remove="Generators\**" />
+    <None Remove="Exceptions\Typed\**" />
+    <None Remove="Generators\**" />
   </ItemGroup>
 
 </Project>
